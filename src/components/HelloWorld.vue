@@ -6,6 +6,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import mapboxgl from 'mapbox-gl'
 import Menu from '@/components/Menu'
 
@@ -18,6 +19,7 @@ export default {
       obj: {
         'newyork': {
           name: 'New York',
+          distance: '24mi',
           coord: {
             lat: 40.7128,
             lng: -74.0060
@@ -25,6 +27,7 @@ export default {
         },
         'moscow': {
           name: 'Moscow',
+          distance: '24mi',
           coord: {
             lat: 55.7558,
             lng: 37.6173
@@ -32,6 +35,7 @@ export default {
         },
         'bogota': {
           name: 'Bogotá',
+          distance: '24mi',
           coord: {
             lat: 4.7110,
             lng: -74.0721
@@ -39,6 +43,7 @@ export default {
         },
         'berlin': {
           name: 'Berlin',
+          distance: '24mi',
           coord: {
             lat: 52.5200,
             lng: 13.4050
@@ -46,19 +51,29 @@ export default {
         },
         'shangai': {
           name: 'Shangai',
+          distance: '24mi',
           coord: {
             lat: 31.2304,
             lng: 121.4737
           }
         }
       },
-      token: process.env.TOKEN
+      token: process.env.TOKEN,
+      geojson: {}
     }
   },
   mounted () {
     this.createMap()
   },
   methods: {
+    loadData: async function () {
+      try {
+        const response = await axios.get(`${process.env.URL}/tweet/thirty_days/foodie,foodporn/${this.obj[this.selected].coord.lng} ${this.obj[this.selected].coord.lat} ${this.obj[this.selected].distance}`)
+        console.log(response)
+      } catch (error) {
+        console.error(error)
+      }
+    },
     createMap: function () {
       let geojson = [{
         'type': 'Feature',
